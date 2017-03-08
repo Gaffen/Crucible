@@ -1,0 +1,24 @@
+{
+    "name": "gaffen/hearsepileup",
+    "description": "The Hearse Pileup website",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Gaffen",
+            "email": "matt@gaffen.co.uk"
+        }
+    ],
+    "require": {
+        "twig/twig": "^2.1",
+        "symfony/http-foundation": "^3.2",
+        "symfony/routing": "^3.2",
+        "symfony/http-kernel": "^3.2",
+        "symfony/event-dispatcher": "^3.2",
+        "symfony/dependency-injection": "^3.2",
+        "symfony/yaml": "^3.2",
+        "mervick/curl-helper": "^1.1"
+    },
+    "autoload": {
+      "psr-4": { "": "src/" }
+    }
+}
