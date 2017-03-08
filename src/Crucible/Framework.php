@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpKernel;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Routing;
+use Twig_Loader_Filesystem;
 
 class Framework extends HttpKernel\HttpKernel{
 

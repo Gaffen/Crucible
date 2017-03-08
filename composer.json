@@ -1,6 +1,6 @@
 {
-    "name": "gaffen/hearsepileup",
-    "description": "The Hearse Pileup website",
+    "name": "gaffen/crucible",
+    "description": "The Crucible Microframework",
     "type": "project",
     "authors": [
         {
@@ -8,6 +8,7 @@
             "email": "matt@gaffen.co.uk"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "twig/twig": "^2.1",
         "symfony/http-foundation": "^3.2",
@@ -19,6 +20,6 @@
         "mervick/curl-helper": "^1.1"
     },
     "autoload": {
-      "psr-4": { "": "src/" }
+      "psr-4": { "Crucible": "src/" }
     }
 }
