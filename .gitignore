@@ -3,3 +3,4 @@ composer.lock
 .htaccess
 cache/*
 cov/*
+config.yml

@@ -6,11 +6,14 @@ use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpKernel;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Routing;
-use Twig_Loader_Filesystem;
 
 class Framework extends HttpKernel\HttpKernel{
 
   private $config = array();
+
+  private $templates;
+  private $cache = 'cache';
+  private $root;
 
   public function __construct(
     EventDispatcher $dispatcher,
@@ -19,17 +22,20 @@ class Framework extends HttpKernel\HttpKernel{
     HttpKernel\Controller\ArgumentResolver $argumentResolver,
     string $config_path
   ){
+    $this->root = dirname($config_path);
     $this->config = Yaml::parse(file_get_contents($config_path));
-    var_dump($this->config);
-    var_dump($dispatcher);
+    $this->templates = $this->root."/".$this->config['webroot']."/templates";
 
     $routes = new Routing\RouteCollection();
 
     if(isset($this->config['routes'])){
       foreach ($this->config['routes'] as $name => $route) {
         $routes->add($name, new Routing\Route($route['route'], array(
-          'rootUrl' => isset($route['root'])? $route['root'] : $this->config['rooturls']['default'],
-          'endpoint' => $route['endpoint'],
+          'rootUrl'     => isset($route['root'])? $route['root'] : $this->config['rooturls']['default'],
+          'endpoint'    => $route['endpoint'],
+          'templates'   => $this->templates,
+          'cache'       => $this->cache,
+          'template'    => (isset($route['template']))? $route['template'] : $name,
           '_controller' => 'Crucible\Controller\RenderController::render'
         )));
       }
@@ -37,7 +43,6 @@ class Framework extends HttpKernel\HttpKernel{
 
     $matcher = new Routing\Matcher\UrlMatcher($routes, new Routing\RequestContext());
     $router = new HttpKernel\EventListener\RouterListener($matcher, $requestStack);
-    var_dump($router->getSubscribedEvents());
 
     $dispatcher->addSubscriber($router);
 

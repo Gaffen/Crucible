@@ -1,6 +1,6 @@
 webroot: web
 rooturls:
-  default: http://192.168.1.98/hp_api/web/wp-json/
+  default:
 routes:
   home:
     route: /

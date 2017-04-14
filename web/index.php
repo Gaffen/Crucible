@@ -12,7 +12,7 @@ $cc->getDefinition('dispatcher')
   ->addMethodCall('addSubscriber',
     array(new Reference('listener.string_response')));
 
-$cc->setParameter('config', __DIR__.'/../config.yml');
+$cc->setParameter('config', dirname(__DIR__).'/config.yml');
 $cc->setParameter('debug', true);
 
 $request = Request::createFromGlobals();
@@ -28,4 +28,4 @@ $response = $cc->get('framework')->handle($request);
 // );
 
 $response->send();
-echo $cc->getParameter('debug');
+// echo $cc->getParameter('debug');
