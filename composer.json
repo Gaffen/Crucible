@@ -21,6 +21,6 @@
         "mervick/curl-helper": "^1.1"
     },
     "autoload": {
-      "psr-4": { "Crucible\\": "src/" }
+      "psr-4": { "Crucible\\": "src/Crucible" }
     }
 }

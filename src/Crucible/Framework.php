@@ -36,6 +36,7 @@ class Framework extends HttpKernel\HttpKernel{
           'templates'   => $this->templates,
           'cache'       => $this->cache,
           'template'    => (isset($route['template']))? $route['template'] : $name,
+          'debug'       => isset($this->config['debug']) && $this->config['debug'] === true,
           '_controller' => 'Crucible\Controller\RenderController::render'
         )));
       }

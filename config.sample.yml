@@ -1,4 +1,5 @@
 webroot: web
+debug: false
 rooturls:
   default:
 routes:
