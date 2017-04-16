@@ -32,10 +32,6 @@ $cc->register('dispatcher', EventDispatcher\EventDispatcher::class)
 
 $cc->register('framework', Framework::class)
   ->setArguments(array(
-    new Reference('dispatcher'),
-    new Reference('controller_resolver'),
-    new Reference('request_stack'),
-    new Reference('argument_resolver'),
     '%config%'
   ));
 

@@ -1,7 +1,7 @@
 webroot: web
-debug: true
+debug: false
 rooturls:
-  default: http://127.0.0.1/hp_api/web/wp-json/
+  default:
 routes:
   home:
     route: /

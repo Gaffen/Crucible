@@ -14,17 +14,30 @@ class Framework extends HttpKernel\HttpKernel{
   private $templates;
   private $cache = 'cache';
   private $root;
+  private $debug;
+
+  protected $dispatcher;
+  private $controllerResolver;
+  protected $requestStack;
+  private $argumentResolver;
 
   public function __construct(
-    EventDispatcher $dispatcher,
-    HttpKernel\Controller\ControllerResolver $controllerResolver,
-    HttpFoundation\RequestStack $requestStack,
-    HttpKernel\Controller\ArgumentResolver $argumentResolver,
     string $config_path
   ){
+
+    $this->dispatcher = new EventDispatcher();
+    $this->controllerResolver = new HttpKernel\Controller\ControllerResolver();
+    $this->requestStack = new HttpFoundation\RequestStack();
+    $this->argumentResolver = new HttpKernel\Controller\ArgumentResolver();
+
+    $this->dispatcher->addSubscriber(new HttpKernel\EventListener\ResponseListener('UTF-8'));
+    $this->dispatcher->addSubscriber(new ClacksListener());
+    $this->dispatcher->addSubscriber(new StringResponseListener());
+
     $this->root = dirname($config_path);
     $this->config = Yaml::parse(file_get_contents($config_path));
     $this->templates = $this->root."/".$this->config['webroot']."/templates";
+    $this->debug = isset($this->config['debug']) && $this->config['debug'] === true;
 
     $routes = new Routing\RouteCollection();
 
@@ -36,17 +49,26 @@ class Framework extends HttpKernel\HttpKernel{
           'templates'   => $this->templates,
           'cache'       => $this->cache,
           'template'    => (isset($route['template']))? $route['template'] : $name,
-          'debug'       => isset($this->config['debug']) && $this->config['debug'] === true,
+          'debug'       => $this->debug,
           '_controller' => 'Crucible\Controller\RenderController::render'
         )));
       }
     }
 
     $matcher = new Routing\Matcher\UrlMatcher($routes, new Routing\RequestContext());
-    $router = new HttpKernel\EventListener\RouterListener($matcher, $requestStack);
+    $router = new HttpKernel\EventListener\RouterListener($matcher, $this->requestStack);
 
-    $dispatcher->addSubscriber($router);
+    $this->dispatcher->addSubscriber($router);
 
-    parent::__construct($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
+    parent::__construct($this->dispatcher, $this->controllerResolver, $this->requestStack, $this->argumentResolver);
+  }
+
+  public function run(HttpFoundation\Request $request = null){
+    if($request === null){
+      $request = HttpFoundation\Request::createFromGlobals();
+    }
+
+    $response = $this->handle($request);
+    $response->send();
   }
 }
