@@ -1,7 +1,7 @@
 {
     "name": "gaffen/crucible",
     "description": "The Crucible Microframework",
-    "type": "project",
+    "type": "library",
     "license": "AGPL-3.0",
     "authors": [
         {
